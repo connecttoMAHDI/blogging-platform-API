@@ -12,8 +12,10 @@ class Blog extends Model
     protected $fillable = [
         'title',
         'category_id',
-        'content'
+        'content',
     ];
+
+    protected $with = ['category', 'tags'];
 
     public function category()
     {
@@ -25,8 +27,8 @@ class Blog extends Model
         return $this->belongsToMany(
             Tag::class,
             'blog_tags',
-            'blog_id',    // Foreign key of the related model (Blog) in the pivot table
-            'tag_id'    // Foreign key of the current model (Tag) in the pivot table
+            'blog_id',
+            'tag_id'
         );
     }
 }

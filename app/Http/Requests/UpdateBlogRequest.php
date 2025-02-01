@@ -6,23 +6,27 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBlogRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    protected function prepareForValidation()
     {
-        return false;
+        // remove null and empty values
+        $this->merge(
+            array_filter(
+                $this->all(),
+                function ($value) {
+                    return ! is_null($value) && $value !== '';
+                }
+            )
+        );
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'title' => 'sometimes|string',
+            'content' => 'sometimes|string',
+            'category_id' => 'sometimes|exists:categories,id',
+            'tags' => 'array|sometimes',
+            'tags.*' => 'sometimes|string|regex:/^[a-zA-Z0-9\-]+$/',
         ];
     }
 }

@@ -1,0 +1,488 @@
+{
+  "version": 6,
+  "entities": [
+    {
+      "entity": {
+        "type": "Project",
+        "id": "bf88674a-3c1b-4597-983a-3d55afdd796d",
+        "name": "Blogging-platform-API"
+      },
+      "children": [
+        {
+          "entity": {
+            "type": "Service",
+            "id": "0edb9c93-085d-4d81-8e24-834c7f18ef2a",
+            "name": "Blog Controller"
+          },
+          "children": [
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+                  "name": "DELETE"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/blogs/2"
+                },
+                "id": "e63d1183-b065-4bd1-af0f-01622fe3fd9d",
+                "name": "destroy",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/blogs"
+                },
+                "id": "3f3e6e08-5897-42f2-a54f-e861f42df1aa",
+                "name": "index",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/blogs/2"
+                },
+                "id": "d113f201-c289-45f2-839f-371c811e8bfd",
+                "name": "show",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "title",
+                        "value": "My Story"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "content",
+                        "value": "My Story starts on July 21st, I think. The story continued..."
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "category_id",
+                        "value": "1"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "tags[]",
+                        "value": "story"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "tags[]",
+                        "value": "biography"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/blogs"
+                },
+                "id": "d21b0c0d-6a47-4f38-b835-36745a2ea1e7",
+                "name": "store",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.4",
+                  "name": "PUT"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "type": "Text",
+                        "name": "title",
+                        "value": ""
+                      },
+                      {
+                        "type": "Text",
+                        "name": "content",
+                        "value": ""
+                      },
+                      {
+                        "type": "Text",
+                        "name": "category_id",
+                        "value": ""
+                      },
+                      {
+                        "type": "Text",
+                        "name": "tags[]",
+                        "value": ""
+                      }
+                    ]
+                  },
+                  "bodyType": "Form",
+                  "textBody": "\t{\n  \"title\" : null,\n  \"content\": \"\",\n  \"category_id\" : \"\",\n  \"tags\" : []\n}"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/blogs/1"
+                },
+                "id": "8ce76779-6bf7-4d37-8fba-d85509e6dc36",
+                "name": "update",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "entity": {
+            "type": "Service",
+            "id": "2a364e30-d474-48af-98e7-f6aa9e98a32f",
+            "name": "Category Controller"
+          },
+          "children": [
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+                  "name": "DELETE"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/categories/1"
+                },
+                "id": "069ef869-c124-425e-a42e-d608c51210cc",
+                "name": "destroy",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/categories"
+                },
+                "id": "c810c783-36c6-44da-b24d-2ab48f67780a",
+                "name": "index",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "name",
+                        "value": "Web Development"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/categories"
+                },
+                "id": "c0bb8ae7-73c1-433f-b8f1-df88760d1655",
+                "name": "store",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "entity": {
+            "type": "Service",
+            "id": "5bfb81b1-c5ac-4a18-be61-616155747383",
+            "name": "Tag Controller"
+          },
+          "children": [
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+                  "name": "DELETE"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/tags/5"
+                },
+                "id": "d8282788-a8b4-4b29-8388-6a6aee915573",
+                "name": "destroy",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/tags"
+                },
+                "id": "d24b317a-6bde-4e6b-bc3a-94b1d8f60035",
+                "name": "index",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "name",
+                        "value": "web"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8000",
+                  "path": "/api/v1/tags"
+                },
+                "id": "5e9fb6e9-546f-4657-887d-2bdb1b8fc33e",
+                "name": "store",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

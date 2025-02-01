@@ -2,109 +2,175 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBlogRequest;
+use App\Http\Requests\UpdateBlogRequest;
+use App\Http\Resources\BlogResource;
 use App\Models\Blog;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlogController extends Controller
 {
+    /**
+     * Retrieve all blogs with their category and tags.
+     *
+     * GET /api/v1/blogs
+     *
+     * Optionally, filter blogs using a search 'term'.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         // Get the search 'term' from query
+        $term = request()->query('term', null);
 
         // Get an instance of query
+        $query = Blog::query();
 
-        // If search 'term' was provided, search for blogs with
-        // Matched title.
-        // Matched content.
-        // Or matched category.
+        // If search 'term' was provided, search for blogs
+        if ($term) {
+            $query->where(function ($q) use ($term) {
+                $q->where('title', 'LIKE', "%{$term}%")
+                    ->orWhere('content', 'LIKE', "%{$term}%")
+                    ->orWhereHas('category', function ($q) use ($term) {
+                        $q->where('name', 'LIKE', "%{$term}%");
+                    });
+            });
+        }
 
-        // Response template:
-        /*
-            [
-                {
-                    "id": 1,
-                    "title": "My First Blog Post",
-                    "content": "This is the content of my first blog post.",
-                    "category": "Technology",
-                    "tags": ["Tech", "Programming"],
-                    "createdAt": "2021-09-01T12:00:00Z",
-                    "updatedAt": "2021-09-01T12:00:00Z"
-                },
-                {
-                    "id": 2,
-                    "title": "My Second Blog Post",
-                    "content": "This is the content of my second blog post.",
-                    "category": "Technology",
-                    "tags": ["Tech", "Programming"],
-                    "createdAt": "2021-09-01T12:30:00Z",
-                    "updatedAt": "2021-09-01T12:30:00Z"
-                }
-            ]
-        */
+        // Fetch the blogs
+        $blogs = $query->get();
+
+        return $this->successResponse(
+            'Blogs retrieved successfully.',
+            BlogResource::collection($blogs)
+        );
     }
 
-    public function store(Request $request)
+    /**
+     * Create a new blog post.
+     *
+     * POST /api/v1/blogs
+     *
+     * Request body:
+     * - title (string, required)
+     * - content (string, required)
+     * - category_id (integer, required)
+     * - tags (array, optional)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(StoreBlogRequest $request)
     {
-        // Get 'title', 'content', ('category' as category_id), and a list of 'tags'
-        // Everything except the tags are required.
+        // Get the validated payload
+        $payload = $request->validated();
 
-        // Tag can only be letter, numbers and hyphen
+        // Ensure 'tags' key exists in payload
+        $tags = $payload['tags'] ?? [];
 
-        // Use findOrCreate for tags to create the tags that doesn't exist
+        // Find or create tags and retrieve their IDs
+        $tagIds = [];
+        foreach ($tags as $t) {
+            $tag = Tag::firstOrCreate(['name' => $t]);
+            $tagIds[] = $tag->id;
+        }
 
-        // Response template:
-        /*
-            {
-                "id": 1,
-                "title": "My First Blog Post",
-                "content": "This is the content of my first blog post.",
-                "category": "Technology",
-                "tags": ["Tech", "Programming"],
-                "createdAt": "2021-09-01T12:00:00Z",
-                "updatedAt": "2021-09-01T12:00:00Z"
-            }
-        */
+        // Create the blog post
+        $blog = Blog::create($payload);
+
+        // Attach tags to the blog (many-to-many relationship)
+        $blog->tags()->sync($tagIds);
+
+        // Refresh the blog instance to load relations
+        $blog->refresh();
+
+        return $this->successResponse(
+            'Blog created successfully.',
+            new BlogResource($blog),
+            Response::HTTP_CREATED
+        );
     }
 
+    /**
+     * Retrieve a single blog post along with its category and tags.
+     *
+     * GET /api/v1/blogs/{id}
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(Blog $blog)
     {
-        // Just show the blog with the following format
-        /*
-            {
-                "id": 1,
-                "title": "My First Blog Post",
-                "content": "This is the content of my first blog post.",
-                "category": "Technology",
-                "tags": ["Tech", "Programming"],
-                "createdAt": "2021-09-01T12:00:00Z",
-                "updatedAt": "2021-09-01T12:00:00Z"
-            }
-        */
+        return $this->successResponse(
+            'Blog retrieved successfully.',
+            new BlogResource($blog),
+        );
     }
 
-    public function update(Request $request, Blog $blog)
+    /**
+     * Update an existing blog post.
+     *
+     * PUT /api/v1/blogs/{id}
+     *
+     * Request body:
+     * - title (string, optional)
+     * - content (string, optional)
+     * - category_id (integer, optional)
+     * - tags (array, optional)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(UpdateBlogRequest $request, Blog $blog)
     {
-        // Get 'title', 'content', ('category' as category_id), and a list of 'tags'
-        // All fields are nullable, if it is null then it will stay unaffected
+        // Get the validated payload
+        $payload = $request->validated();
 
-        // Update the blog
+        // Ensure 'tags' key exists in payload
+        $tags = $payload['tags'] ?? [];
 
-        // Response template
-        /*
-            {
-                "id": 1,
-                "title": "My Updated Blog Post",
-                "content": "This is the updated content of my first blog post.",
-                "category": "Technology",
-                "tags": ["Tech", "Programming"],
-                "createdAt": "2021-09-01T12:00:00Z",
-                "updatedAt": "2021-09-01T12:30:00Z"
-            }
-        */
+        // Find or create tags and retrieve their IDs
+        $tagIds = [];
+        foreach ($tags as $t) {
+            $tag = Tag::firstOrCreate(['name' => $t]);
+            $tagIds[] = $tag->id;
+        }
+
+        // Update the blog post
+        $blog->update($payload);
+
+        // Only sync tags if they are provided and have changed
+        if (! empty($tags)) {
+            $blog->tags()->sync($tagIds);
+        }
+
+        // Refresh the blog instance to load relations
+        $blog->refresh();
+
+        return $this->successResponse(
+            'Blog updated successfully.',
+            new BlogResource($blog),
+            Response::HTTP_OK
+        );
     }
 
+    /**
+     * Delete a blog post.
+     *
+     * DELETE /api/v1/blogs/{id}
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Blog $blog)
     {
-        // Delete the blog and return 204
+        // Detach tags associated with the blog
+        $blog->tags()->detach();
+
+        // Delete the blog
+        $blog->delete();
+
+        return $this->successResponse(
+            statusCode: Response::HTTP_NO_CONTENT
+        );
     }
 }

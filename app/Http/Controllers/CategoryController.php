@@ -3,27 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
+    /**
+     * Retrieve all categories.
+     *
+     * GET /api/v1/categories
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
-        //Simply return the name of all Categories
+        // Return the name of all tags
+        return $this->successResponse(
+            'Categories retrieved successfully.',
+            Category::all(),
+        );
     }
 
+    /**
+     * Create a new category.
+     *
+     * POST /api/v1/categories
+     *
+     * Request body:
+     * - name (string, required, max: 64)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
-        // Get the name and create the category
+        // Validate input
+        $request->validate(['name' => 'required|string|max:64']);
+
+        // Create the tag
+        $category = Category::create(['name' => $request->name]);
+
+        return $this->successResponse(
+            'Category created successfully.',
+            $category,
+            Response::HTTP_CREATED
+        );
     }
 
-    public function update(Request $request, Category $category)
-    {
-        // Get the new name and update the category
-    }
-
+    /**
+     * Delete a category.
+     *
+     * DELETE /api/v1/categories/{id}
+     *
+     * Returns HTTP 400 if deletion fails due to constraint violations.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Request $request, Category $category)
     {
-        //Simply delete the category and return 204
+        try {
+            $category->delete();
+
+            return $this->successResponse(
+                statusCode: Response::HTTP_NO_CONTENT
+            );
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return $this->failureResponse(
+                    'Failed to delete the category because of constraint violation.'
+                );
+            }
+            throw $e; // The global error handlers will catch it.
+        }
     }
 }

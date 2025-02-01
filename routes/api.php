@@ -10,6 +10,6 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
     Route::apiResource('blogs', BlogController::class);
-    Route::apiResource('categories', CategoryController::class)->except('show');
-    Route::apiResource('tags', TagController::class)->except('show');
+    Route::apiResource('categories', CategoryController::class)->except(['show', 'update']);
+    Route::apiResource('tags', TagController::class)->except(['show', 'update']);
 });

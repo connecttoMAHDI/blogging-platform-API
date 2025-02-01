@@ -16,7 +16,7 @@ return new class extends Migration
                 ->constrained('blogs', 'id')
                 ->restrictOnDelete();
             $table->foreignId('tag_id')
-                ->constrained('tags',  'id')
+                ->constrained('tags', 'id')
                 ->restrictOnDelete();
 
             $table->unique(['blog_id', 'tag_id']);

@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Blog;
+use App\Models\BlogTag;
 use App\Models\Category;
 use App\Models\Tag;
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,8 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(Category::class);
-        $this->call(Tag::class);
-        $this->call(Blog::class);
+        Category::create([
+            'name' => 'Uncategorized',
+        ]);
+        Category::factory(20)->create();
+        Tag::factory(100)->create();
+        Blog::factory(30)->create();
+        BlogTag::factory(40)->create();
     }
 }

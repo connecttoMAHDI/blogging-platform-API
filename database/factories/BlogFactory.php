@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class BlogFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->sentence(),
+            'content' => $this->faker->paragraph(),
+            'category_id' => Category::query()->exists()
+                ? Category::inRandomOrder()->first()->id
+                : Category::factory(),
         ];
     }
 }

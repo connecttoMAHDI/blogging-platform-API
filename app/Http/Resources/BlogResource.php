@@ -7,21 +7,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class BlogResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
-            'id',
-            'title',
-            'content',
-            'category',
-            'tags',
-            'createdAt',
-            'updatedAt'
+            'id' => $this->id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'category' => $this->category->name ?? 'Uncategorized',
+            'tags' => $this->whenLoaded('tags', function () {
+                return $this->tags->pluck('name');
+            }),
+            'createdAt' => $this->created_at->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->updated_at->format('Y-m-d H:i:s'),
         ];
     }
 }
